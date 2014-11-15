@@ -207,15 +207,17 @@ namespace System.Xml.Linq
         /// <returns>XML text representation of an attribute and its value</returns>
         public override string ToString()
         {
-            using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+            var sw = new StringWriter(CultureInfo.InvariantCulture);
+            var ws = new XmlWriterSettings
             {
-                XmlWriterSettings ws = new XmlWriterSettings();
-                ws.ConformanceLevel = ConformanceLevel.Fragment;
-                using (XmlWriter w = XmlWriter.Create(sw, ws))
-                {
-                    w.WriteAttributeString(GetPrefixOfNamespace(name.Namespace), name.LocalName, name.NamespaceName, value);
-                }
-                return sw.ToString().Trim();
+                ConformanceLevel = ConformanceLevel.Fragment
+            };
+            using (var w = XmlWriter.Create(sw, ws))
+            {
+                w.WriteAttributeString(GetPrefixOfNamespace(name.Namespace), name.LocalName, name.NamespaceName, value);
+                var s = sw.ToString().Trim();
+
+                return s;
             }
         }
 
