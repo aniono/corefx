@@ -376,12 +376,12 @@ namespace System.Xml.Linq
             }
         }
 
-        bool IXmlLineInfo.HasLineInfo()
+        public bool HasLineInfo()
         {
             return Annotation<LineInfoAnnotation>() != null;
         }
 
-        int IXmlLineInfo.LineNumber
+        public int LineNumber
         {
             get
             {
@@ -391,7 +391,7 @@ namespace System.Xml.Linq
             }
         }
 
-        int IXmlLineInfo.LinePosition
+        public int LinePosition
         {
             get
             {

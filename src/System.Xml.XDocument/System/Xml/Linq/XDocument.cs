@@ -420,13 +420,11 @@ namespace System.Xml.Linq
         /// </returns>
         public static XDocument Parse(string text, LoadOptions options)
         {
-            using (StringReader sr = new StringReader(text))
+            StringReader sr = new StringReader(text);
+            XmlReaderSettings rs = GetXmlReaderSettings(options);
+            using (XmlReader r = XmlReader.Create(sr, rs))
             {
-                XmlReaderSettings rs = GetXmlReaderSettings(options);
-                using (XmlReader r = XmlReader.Create(sr, rs))
-                {
-                    return Load(r, options);
-                }
+                return Load(r, options);
             }
         }
 

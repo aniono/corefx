@@ -630,27 +630,26 @@ namespace System.Xml.Linq
 
         string GetXmlString(SaveOptions o)
         {
-            using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+            StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
+            XmlWriterSettings ws = new XmlWriterSettings();
+            ws.OmitXmlDeclaration = true;
+            if ((o & SaveOptions.DisableFormatting) == 0) ws.Indent = true;
+            if ((o & SaveOptions.OmitDuplicateNamespaces) != 0) ws.NamespaceHandling |= NamespaceHandling.OmitDuplicates;
+            if (this is XText) ws.ConformanceLevel = ConformanceLevel.Fragment;
+            using (XmlWriter w = XmlWriter.Create(sw, ws))
             {
-                XmlWriterSettings ws = new XmlWriterSettings();
-                ws.OmitXmlDeclaration = true;
-                if ((o & SaveOptions.DisableFormatting) == 0) ws.Indent = true;
-                if ((o & SaveOptions.OmitDuplicateNamespaces) != 0) ws.NamespaceHandling |= NamespaceHandling.OmitDuplicates;
-                if (this is XText) ws.ConformanceLevel = ConformanceLevel.Fragment;
-                using (XmlWriter w = XmlWriter.Create(sw, ws))
+                XDocument n = this as XDocument;
+                if (n != null)
                 {
-                    XDocument n = this as XDocument;
-                    if (n != null)
-                    {
-                        n.WriteContentTo(w);
-                    }
-                    else
-                    {
-                        WriteTo(w);
-                    }
+                    n.WriteContentTo(w);
                 }
-                return sw.ToString();
+                else
+                {
+                    WriteTo(w);
+                }
             }
+
+            return sw.ToString();
         }
     }
 }

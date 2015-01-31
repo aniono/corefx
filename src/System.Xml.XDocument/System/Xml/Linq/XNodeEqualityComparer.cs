@@ -77,9 +77,7 @@ namespace System.Xml.Linq
         bool IEqualityComparer.Equals(object x, object y)
         {
             XNode n1 = x as XNode;
-            if (n1 == null && x != null) throw new ArgumentException(SR.Format(SR.Argument_MustBeDerivedFrom, typeof(XNode)), "x");
             XNode n2 = y as XNode;
-            if (n2 == null && y != null) throw new ArgumentException(SR.Format(SR.Argument_MustBeDerivedFrom, typeof(XNode)), "y");
             return Equals(n1, n2);
         }
 
